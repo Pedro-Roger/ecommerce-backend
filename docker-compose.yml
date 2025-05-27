@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  pgsql:
+    container_name: progamers_db_local
+    image: postgres:14-alpine
+    environment:
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: progamersdb
+    ports:
+      - 5433:5432
