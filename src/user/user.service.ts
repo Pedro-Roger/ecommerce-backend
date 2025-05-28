@@ -1,35 +1,29 @@
-/* eslint-disable prettier/prettier */
-/*
-https://docs.nestjs.com/providers#services
-*/
-
 import { Injectable } from '@nestjs/common';
-
-
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'prisma/prisma.service';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UserService {
-    constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) {}
 
-    async createUser (name:string, email:string, password:string) {
-        const hashedPassword = await bcrypt.hash(password, 10);
+  async createUser(data: CreateUserDto) {
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+    return await this.prisma.user.create({
+      data: {
+        name: data.name,
+        email: data.email,
+        password: hashedPassword,
+        isAdmin: data.isAdmin || false,
+      },
+    });
+  }
 
-        return this.prisma.user.create({
-            data:{
-                name,
-                email,
-                password: hashedPassword
-            }
-        })
-    }
-
-    async findByEmail(email: string) {
-        return this.prisma.user.findUnique({
-            where: {
-                email
-            }
-        })
-    }
+  async findByEmail(email: string) {
+    return this.prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+  }
 }
