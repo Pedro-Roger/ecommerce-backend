@@ -1,19 +1,15 @@
-/*
-https://docs.nestjs.com/controllers#controllers
-*/
-
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, UseGuards, Request } from '@nestjs/common';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { AdminGuard } from './guards/admin.guard';
 
 @Controller('admin')
 export class AuthController {
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @Get('dashboard')
   getDashboard(@Request() req) {
-    if (!req.user.isAdmin) {
-      return { message: 'Acesso negado. Você não é admin.' };
-    }
-
-    return { message: 'Bem-vindo ao painel admin!', user: req.user };
+    return {
+      message: 'Bem-vindo ao painel admin!',
+      user: req.user,
+    };
   }
 }
