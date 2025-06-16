@@ -1,3 +1,4 @@
+// create-product.dto.ts
 import {
   IsNotEmpty,
   IsNumber,
@@ -17,6 +18,7 @@ export class CreateProductDto {
   price: number;
 
   @IsString()
+  @IsNotEmpty() 
   image: string;
 
   @IsNumber()
